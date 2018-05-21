@@ -1,32 +1,55 @@
 import scipy as *
 
-n = 500
-world = zeros([n,n,n])
+size([random(size) for index in range(3)]) = 1
 
-## inititation of initial deem
-x, y, z = stats.randomint(500), stats.randomint(500), stats.randomint(500)
+# write a function to return neighbours
+def main():
 
-zeros[x,y,z] = 1
+    #currently starts out with empty grid
+    #in the future if random positions are populated it will be included
+    class model:
 
-def neighbours(position):
-    nn = []
-    nbs = []
-    for axis in position:
-        nn.append(axis+1)
-        nn.append(axis-1)
-    for index in range(len(nn)):
-        if index/2 <=1:
-            nbs.append([nn[index],position[1],position[2]])
-        elif 1 < index/2 <=2:
-            nbs.append([position[0], nn[index], position[2]])
-        else:
-            nbs.append([position[0], position[1], nn[index])
-    return nbs
+        def __init__(self,size):
+            self.space = array([size for i in range(3)])
+
+
+        def populate_nbs(position):
+            neighbour =  [[position[0]+1,position[1],position[2]],[position[0]-1,position[1],position[2]],[position[0],position[1]+1,position[2]],[position[0],position[1]-1,position[2]],[position[0],position[1],position[2]+1],[position[0],position[1],position[2]-1]]
+            for index,item in enumerate(position):
+                if item == 0:
 
 
 
+            @classmethod
+        def vaccant_nbs(self,position):
+            # position is a list of length 3
+            # this function should only return empty neighbours
+            vaccant_deems = []
+            for i in populate_nbs(position):
+                if self.space[i] == 1:
+                vaccant_deems.append(self.space[i])
+        return vaccant_deems
 
-for neighbours in [
+    grid = model(100)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
