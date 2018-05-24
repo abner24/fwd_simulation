@@ -8,9 +8,16 @@ def main(size):
 
     #currently starts out with empty grid
     #in the future if random positions are populated it will be included
-    class model(object):
+    class Model(object):
+        prob = 0.1
         def __init__(self,size):
+            self.size = size
             self.space = np.zeros([size for i in range(3)])
+            self.pointx = []
+            self.pointy = []
+            self.pointz = []
+            self.level = []
+            self.counter = 0
 
         @staticmethod
         def populate_nbs(position):
@@ -37,67 +44,76 @@ def main(size):
             vaccant_sites = self.vaccant_nbs(position)
             if len(vaccant_sites) > 0:
                 return vaccant_sites[np.random.randint(len(vaccant_sites))]
-        
-        def poisson_migration(self,position):
-            choice = self.grid_chooser(position)
-            if choice == None:
-                return 0
-            print(self.space)
-            if self.space[tuple(choice)] == 0:
-                self.space[tuple(choice)] = 1
-                if np.sum(self.space)<(size**3-1):
-                    self.poisson_migration(choice)
-            else:
-                self.poisson_migration(choice)
 
-        def update_graph(num):
-            ax = p3.Axes3D(fig)
-            ax.set_xlim3d([-5.0, size])
-            ax.set_xlabel('X')
-            ax.set_ylim3d([-5.0, size])
-            ax.set_ylabel('Y')
-            ax.set_zlim3d([-5.0, size])
-            ax.set_zlabel('Z')
-            title='3D Test, Time='+str(num*100)
-            ax.set_title(title)
-            sample=data0[data0['time']==num*100]
-            x=sample.x
-            y=sample.y
-            z=sample.z
-            graph=ax.scatter(x,y,z)
-            return(graph)
+        def poisson_migration(self,position,depth=0):
+            self.level.append(depth)
+            while len(self.vaccant_nbs(position))>0:
+                choice = self.grid_chooser(position)
+                #if choice == None:
+                #    return 0
+                if self.space[tuple(choice)] == 0:
+                    if np.random.exponential() > self.prob:
+                        self.space[tuple(choice)] = 1
+                        self.pointx.append(choice[0])
+                        self.pointy.append(choice[1])
+                        self.pointz.append(choice[2])
+                        if np.sum(self.space)<(size**3-1):
+                            self.poisson_migration(choice,depth=depth+1)
 
-        fig = plt.figure()
-        ax = p3.Axes3D(fig)
+                else:
+                    self.poisson_migration(choice,depth=depth+1)
+                #z, x, y = self.space.nonzero()
+                #self.pointx.append(x)
+                #self.pointy.append(y)
+                #self.pointz.append(z)
 
-        # Setting the axes properties
-        ax.set_xlim3d([-5.0, 5.0])
-        ax.set_xlabel('X')
-        ax.set_ylim3d([-5.0, 5.0])
-        ax.set_ylabel('Y')
-        ax.set_zlim3d([-5.0, 5.0])
-        ax.set_zlabel('Z')
-        ax.set_title('3D Test')
-        data=data0[data0['time']==0]
-        x=data.x
-        y=data.y
-        z=data.z
-        graph=ax.scatter(x,y,z)
+      #  def update_graph(self,status):
+      #      ax = p3.Axes3D(self.fig)
+      #      ax.set_xlim3d([0, size])
+      #      ax.set_xlabel('X')
+      #      ax.set_ylim3d([0, size])
+      #      ax.set_ylabel('Y')
+      #      ax.set_zlim3d([0, size])
+      #      ax.set_zlabel('Z')
+      #      z, x, y = status.nonzero()
+      #      graph=self.ax.scatter(x, y, z)
+      #      return(graph)
 
-        # Creating the Animation object
-        line_ani = animation.FuncAnimation(fig, update_graph, 19, 
-                                           interval=350, blit=False)   
-    
-    grid = model(size)
+    grid = Model(size)
     position  = [np.random.randint(size) for i in range(3)]
-    #here is the issue!
-    grid.space[tuple(position)] = 1 
-    print(grid.space)
-
+    grid.space[tuple(position)] = 1
+    # Creating the Animation object
     grid.poisson_migration(position)
+    fig = plt.figure()
+    ax = p3.Axes3D(fig)
+    ax.set_xlim(0, size)
+    ax.set_ylim(0, size)
+    ax.set_zlim(0, size)
+    ax.set_xlabel('X axis')
+    ax.set_ylabel('Y axis')
+    ax.set_zlabel('Z axis')
 
+    index_sets = [np.argwhere(i==grid.level) for i in np.unique(grid.level)]
+    #print(index_sets)
+    print(index_sets[1][0])
+    for num in range(len(index_sets)):
+        print('{}\t{}\t{}'.format([grid.pointx[i] for i in index_sets[num][:,0]],
+                                  [grid.pointy[i] for i in index_sets[num][:,0]],
+                                  [grid.pointz[i] for i in index_sets[num][:,0]]))
+    def update(num):
+        return ax.scatter(([grid.pointx[i] for i in index_sets[num][:,0]]),
+                          ([grid.pointy[i] for i in index_sets[num][:,0]]),
+                          ([grid.pointz[i] for i in index_sets[num][:,0]]),
+                          s=50, marker = '*', c = 'orange')
+
+    #ax.scatter(grid.pointx[num],grid.pointy[num], grid.pointz[num], marker = (5,2),s=5)
+    #ax.scatter([grid.pointx[i] for i in index_sets[1][:,0]],
+    #            [grid.pointy[i] for i in index_sets[1][:,0]],
+    #            [grid.pointz[i] for i in index_sets[1][:,0]])
+    animate = animation.FuncAnimation(fig, update, np.arange(0,len(index_sets)), interval = 50)
+    plt.show()
 if __name__=='__main__':
-    main(5)
+    main(7)
 
 
 
