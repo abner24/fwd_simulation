@@ -9,7 +9,8 @@ def main(size):
     #currently starts out with empty grid
     #in the future if random positions are populated it will be included
     class Model(object):
-        prob = 0.1
+        prob = 100
+        timeout = 0
         def __init__(self,size):
             self.size = size
             self.space = np.zeros([size for i in range(3)])
@@ -18,7 +19,8 @@ def main(size):
             self.pointz = []
             self.level = []
             self.counter = 0
-
+            #for poisson processes
+            self.timestamp = []
         @staticmethod
         def populate_nbs(position):
             neighbour =  ([[position[0]+1,position[1],position[2]],
@@ -47,19 +49,30 @@ def main(size):
 
         def poisson_migration(self,position,depth=0):
             self.level.append(depth)
+            if len(self.timestamp) <= depth:
+                self.timestamp.append(0)
             while len(self.vaccant_nbs(position))>0:
+            #for i in range(10):
                 choice = self.grid_chooser(position)
-                #if choice == None:
-                #    return 0
+                interval = np.random.exponential(self.prob)
+                print(self.timestamp)
+                print(len(self.timestamp))
+                if choice == None:
+                    return 0
                 if self.space[tuple(choice)] == 0:
-                    if np.random.exponential() > self.prob:
+                    if interval >= self.timestamp[depth]:
+                        self.timestamp[depth]+=interval
                         self.space[tuple(choice)] = 1
                         self.pointx.append(choice[0])
                         self.pointy.append(choice[1])
                         self.pointz.append(choice[2])
                         if np.sum(self.space)<(size**3-1):
                             self.poisson_migration(choice,depth=depth+1)
-
+                    else:
+                        if self.timeout < 1000:
+                            self.timeout+=1
+                        else:
+                            return 0 
                 else:
                     self.poisson_migration(choice,depth=depth+1)
                 #z, x, y = self.space.nonzero()
@@ -111,6 +124,7 @@ def main(size):
     #            [grid.pointy[i] for i in index_sets[1][:,0]],
     #            [grid.pointz[i] for i in index_sets[1][:,0]])
     animate = animation.FuncAnimation(fig, update, np.arange(0,len(index_sets)), interval = 50)
+    animate.save("trial1.mp4", writer="ffmpeg")
     plt.show()
 if __name__=='__main__':
     main(7)
