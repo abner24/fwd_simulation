@@ -14,6 +14,7 @@ def main(size):
         def __init__(self,size):
             self.size = size
             self.space = np.zeros([size for i in range(3)])
+            self.active_grid=[]
             self.pointx = []
             self.pointy = []
             self.pointz = []
@@ -46,6 +47,35 @@ def main(size):
             vaccant_sites = self.vaccant_nbs(position)
             if len(vaccant_sites) > 0:
                 return vaccant_sites[np.random.randint(len(vaccant_sites))]
+
+        def migration(self,position):
+            self.space[tuple(position)] = 1
+            self.active_grid.append(position)
+            while len(self.active_grid) >= 1:
+                xstate=[]
+                ystate=[]
+                zstate=[]
+                monitor = []
+                for index,nodes in enumerate(self.active_grid):
+                    if len(self.vaccant_nbs(nodes)) > 0 and index not in monitor:
+                        monitor.append(index)
+                    choice = self.grid_chooser(nodes)
+                    if choice is None:
+                        return 0
+                    if self.space[tuple(choice)] == 1:
+                        continue
+                    else:
+                        self.space[tuple(choice)] = 1
+                        xstate.append(choice[0])
+                        ystate.append(choice[1])
+                        zstate.append(choice[2])
+                        if choice not in self.active_grid:
+                            self.active_grid.append(choice)
+                self.pointx.append(xstate)
+                self.pointy.append(ystate)
+                self.pointz.append(zstate)
+                if len(monitor)>0:
+                    self.active_grid = [self.active_grid[i] for i in monitor]
 
         def poisson_migration(self,position,depth=0):
             self.level.append(depth)
@@ -94,9 +124,10 @@ def main(size):
 
     grid = Model(size)
     position  = [np.random.randint(size) for i in range(3)]
-    grid.space[tuple(position)] = 1
+    grid.migration(position)
+    #grid.space[tuple(position)] = 1
     # Creating the Animation object
-    grid.poisson_migration(position)
+    #grid.poisson_migration(position)
     fig = plt.figure()
     ax = p3.Axes3D(fig)
     ax.set_xlim(0, size)
@@ -106,13 +137,19 @@ def main(size):
     ax.set_ylabel('Y axis')
     ax.set_zlabel('Z axis')
 
-    index_sets = [np.argwhere(i==grid.level) for i in np.unique(grid.level)]
+    def upgrade_iterator(num):
+        return ax.scatter(grid.pointx[num],
+                          grid.pointy[num],
+                          grid.pointz[num],
+                          s=50,marker = '*', c='orange')
+
+    #index_sets = [np.argwhere(i==grid.level) for i in np.unique(grid.level)]
     #print(index_sets)
-    print(index_sets[1][0])
-    for num in range(len(index_sets)):
-        print('{}\t{}\t{}'.format([grid.pointx[i] for i in index_sets[num][:,0]],
-                                  [grid.pointy[i] for i in index_sets[num][:,0]],
-                                  [grid.pointz[i] for i in index_sets[num][:,0]]))
+    #print(index_sets[1][0])
+    #for num in range(len(index_sets)):
+    #    print('{}\t{}\t{}'.format([grid.pointx[i] for i in index_sets[num][:,0]],
+    #                              [grid.pointy[i] for i in index_sets[num][:,0]],
+    #                              [grid.pointz[i] for i in index_sets[num][:,0]]))
     def update(num):
         return ax.scatter(([grid.pointx[i] for i in index_sets[num][:,0]]),
                           ([grid.pointy[i] for i in index_sets[num][:,0]]),
@@ -123,8 +160,11 @@ def main(size):
     #ax.scatter([grid.pointx[i] for i in index_sets[1][:,0]],
     #            [grid.pointy[i] for i in index_sets[1][:,0]],
     #            [grid.pointz[i] for i in index_sets[1][:,0]])
-    animate = animation.FuncAnimation(fig, update, np.arange(0,len(index_sets)), interval = 50)
-    animate.save("trial1.mp4", writer="ffmpeg")
+    print('{}\t{}\t{}'.format([grid.pointx[i] for i in range(len(grid.pointx))],
+                              [grid.pointy[i] for i in range(len(grid.pointy))],
+                              [grid.pointz[i] for i in range(len(grid.pointz))]))
+    animate = animation.FuncAnimation(fig, upgrade_iterator, frames=len(grid.pointx),interval = 50)
+    #animate.save("trial1.mp4", writer="ffmpeg")
     plt.show()
 if __name__=='__main__':
     main(7)
