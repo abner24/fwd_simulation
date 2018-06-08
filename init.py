@@ -2,10 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as p3
 import matplotlib.animation as animation
-
+import subprocess
+import timeit
 
 # write a function to return neighbours
-def main(size):
+def main(size, return_plot, run_ms):
     # currently starts out with empty grid
     # in the future if random positions are populated it will be included
     class Model(object):
@@ -27,6 +28,7 @@ def main(size):
             self.counter = 0
             # for poisson processes
             self.timestamp = []
+            self.migration_param = []
 
         @staticmethod
         def populate_nbs(position):
@@ -37,6 +39,10 @@ def main(size):
                           [position[0], position[1], position[2] + 1],
                           [position[0], position[1], position[2] - 1]])
             return neighbour
+
+        def flat_pos(self,pos):
+            if pos != None:
+                return str(pos[0]+self.size*(pos[1]+self.size*pos[2]))
 
         def vaccant_nbs(self, position):
             # position is a list of length 3
@@ -70,6 +76,10 @@ def main(size):
                     if np.random.random() < self.prob:
                         continue
                     choice = self.grid_chooser(sites)
+                    if choice != None:
+                        self.migration_param.append('-m')
+                        self.migration_param.append(self.flat_pos(sites))
+                        self.migration_param.append(self.flat_pos(choice))
                     if choice is not None and self.space[tuple(choice)] == 0:
                         self.space[tuple(choice)] = 1
                         if choice not in self.active_grid:
@@ -119,17 +129,21 @@ def main(size):
     grid = Model(size)
     position = [np.random.randint(size) for i in range(3)]
     grid.pop_mig(position)
+
+    if run_ms is True:
+        node_pop = 15
+        total_sample = str(node_pop*size**3)
+        ms_defaults = ['ms',total_sample, '1', 'T', '-t', '1', '-I', str(size**3)]
+        layout = ['0' for i in range(size**3)]
+        layout[0] = total_sample
+        ms_defaults = ms_defaults + layout + grid.migration_param
+        print(ms_defaults)
+        print('\n Time for size of grid {} \t'.format(size))
+        print(timeit.timeit(subprocess.call(' '.join(ms_defaults)),number=100, shell=True))
+
     # grid.space[tuple(position)] = 1
     # Creating the Animation object
     # grid.poisson_migration(position)
-    fig = plt.figure()
-    ax = p3.Axes3D(fig)
-    ax.set_xlim(0, size)
-    ax.set_ylim(0, size)
-    ax.set_zlim(0, size)
-    ax.set_xlabel('X axis')
-    ax.set_ylabel('Y axis')
-    ax.set_zlabel('Z axis')
 
     def upgrade_iterator(num):
         return ax.scatter(grid.pointx[num],
@@ -143,9 +157,20 @@ def main(size):
                           ([grid.pointz[i] for i in index_sets[num][:, 0]]),
                           s=50, marker='*', c='orange')
 
-    animate = animation.FuncAnimation(fig, upgrade_iterator, frames=len(grid.pointx),interval = 120)
-    animate.save('animate.mp4', writer = 'ffmpeg')
-    plt.show()
+    if return_plot == ('yes' or 'y'):
+        fig = plt.figure()
+        ax = p3.Axes3D(fig)
+        ax.set_xlim(0, size)
+        ax.set_ylim(0, size)
+        ax.set_zlim(0, size)
+        ax.set_xlabel('X axis')
+        ax.set_ylabel('Y axis')
+        ax.set_zlabel('Z axis')
+
+        animate = animation.FuncAnimation(fig, upgrade_iterator, frames=len(grid.pointx),interval = 120)
+        animate.save('animate.mp4', writer = 'ffmpeg')
+        plt.show()
 
 if __name__ == '__main__':
-    main(20)
+    for i in range(10):
+        main(i+3,'n',True)
