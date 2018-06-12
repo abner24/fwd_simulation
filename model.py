@@ -1,5 +1,3 @@
-#!/home/mslim/.conda/envs/py36/bin/python3.6
-
 import numpy as np
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as p3

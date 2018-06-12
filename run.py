@@ -1,3 +1,5 @@
+#!/home/mslim/.conda/envs/py36/bin/python3.6
+
 from model import foward_simulation
 import timeit
 import numpy as np
@@ -14,8 +16,9 @@ def generate_command(grid_size,node_pop):
     layout = [str(node_pop) for i in range(grid_size ** 3)]
     return ' '.join(command + layout + ssm.migration_param)
 
+print('size\tduration\tduration(ms)')
 for i in range(30):
-    print('size\tduration\tduration(ms)')
-    print('{}\t{}\t{}'.format(i+3,timeit.timeit(lambda: generate_command(i+3, 15), number=10),
-                              subprocess.run(generate_command(i+3, 15), shell=True, env=env, stderr=subprocess.STDOUT, stdout=subprocess.DEVNULL)))
+    print('{}\t{}\t{}'.format(i+3, 
+        timeit.timeit(lambda: generate_command(i+3, 15), number=10),
+        timeit.timeit(lambda: subprocess.run(generate_command(i+3, 15), shell=True, env=env, stderr=subprocess.STDOUT, stdout=subprocess.DEVNULL), number=10)))
     #print(str(len(generate_command(i+3,15)))+'\n')
