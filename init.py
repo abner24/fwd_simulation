@@ -1,9 +1,14 @@
+#!/home/mslim/.conda/envs/py36/bin/python3.6
+
 import numpy as np
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as p3
 import matplotlib.animation as animation
 import subprocess
 import timeit
+import os
+
+env = os.environ.copy()
 
 # write a function to return neighbours
 def main(size, return_plot, run_ms):
@@ -42,7 +47,7 @@ def main(size, return_plot, run_ms):
 
         def flat_pos(self,pos):
             if pos != None:
-                return str(pos[0]+self.size*(pos[1]+self.size*pos[2]))
+                return str(pos[0]+self.size*(pos[1]+self.size*pos[2])+1)
 
         def vaccant_nbs(self, position):
             # position is a list of length 3
@@ -77,7 +82,8 @@ def main(size, return_plot, run_ms):
                         continue
                     choice = self.grid_chooser(sites)
                     if choice != None:
-                        self.migration_param.append('-m')
+                        self.migration_param.append('-ej')
+                        self.migration_param.append(str(len(self.pointx)))
                         self.migration_param.append(self.flat_pos(sites))
                         self.migration_param.append(self.flat_pos(choice))
                     if choice is not None and self.space[tuple(choice)] == 0:
@@ -105,8 +111,8 @@ def main(size, return_plot, run_ms):
                 # for i in range(10):
                 choice = self.grid_chooser(position)
                 interval = np.random.exponential(self.prob)
-                print(self.timestamp)
-                print(len(self.timestamp))
+                #print(self.timestamp)
+                #print(len(self.timestamp))
                 if choice is None:
                     return 0
                 if self.space[tuple(choice)] == 0:
@@ -133,13 +139,12 @@ def main(size, return_plot, run_ms):
     if run_ms is True:
         node_pop = 15
         total_sample = str(node_pop*size**3)
-        ms_defaults = ['ms',total_sample, '1', 'T', '-t', '1', '-I', str(size**3)]
-        layout = ['0' for i in range(size**3)]
-        layout[0] = total_sample
+        ms_defaults = ['ms',total_sample, '1', '-T', '-t', '1', '-I', str(size**3)]
+        layout = [str(node_pop) for i in range(size**3)]
+        #layout[int(grid.migration_param[1])-1] = total_sample
         ms_defaults = ms_defaults + layout + grid.migration_param
-        print(ms_defaults)
-        print('\n Time for size of grid {} \t'.format(size))
-        print(timeit.timeit(subprocess.call(' '.join(ms_defaults)),number=100, shell=True))
+        #print(ms_defaults)
+        subprocess.run(' '.join(ms_defaults), shell=True, env=env, stderr=subprocess.STDOUT, stdout=subprocess.DEVNULL)
 
     # grid.space[tuple(position)] = 1
     # Creating the Animation object
@@ -172,5 +177,7 @@ def main(size, return_plot, run_ms):
         plt.show()
 
 if __name__ == '__main__':
-    for i in range(10):
-        main(i+3,'n',True)
+    import timeit
+    print('size\tduration')
+    for i in range(30):
+        print('{}\t{}'.format(i+3,timeit.timeit(lambda: main(i+3,'n',True), number=10)))
