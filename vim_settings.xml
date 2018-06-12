@@ -1,0 +1,153 @@
+<application>
+  <component name="VimSettings">
+    <state version="4" enabled="false" />
+    <globalmarks />
+    <filemarks>
+      <file name="$USER_HOME$/scripts/model/init.py" timestamp="1527759547041">
+        <mark key="[" line="0" column="10" />
+        <mark key="]" line="0" column="9" />
+        <mark key="^" line="0" column="9" />
+        <mark key="." line="0" column="9" />
+      </file>
+      <file name="/Dummy.txt" timestamp="1528338722839">
+        <mark key="[" line="0" column="0" />
+      </file>
+      <file name="/code.py" timestamp="1528787148120">
+        <mark key="[" line="0" column="0" />
+        <mark key="]" line="11" column="4" />
+        <mark key="." line="11" column="4" />
+      </file>
+      <file name="/Python Console" timestamp="1528338685786">
+        <mark key="[" line="0" column="0" />
+        <mark key="]" line="0" column="11" />
+        <mark key="^" line="0" column="11" />
+        <mark key="." line="0" column="11" />
+      </file>
+      <file name="$USER_HOME$/PycharmProjects/tcga_cna/cna.py" timestamp="1527668856198">
+        <mark key="[" line="4" column="0" />
+        <mark key="]" line="4" column="87" />
+        <mark key="^" line="7" column="0" />
+        <mark key="." line="7" column="0" />
+      </file>
+      <file name="$USER_HOME$/PycharmProjects/vcf_sclust/main.py" timestamp="1528339112319">
+        <mark key="[" line="0" column="0" />
+        <mark key="]" line="4" column="61" />
+        <mark key="." line="4" column="0" />
+        <mark key="^" line="4" column="0" />
+      </file>
+      <file name="/a.dummy" timestamp="1527736009733">
+        <mark key="[" line="0" column="0" />
+      </file>
+      <file name="$USER_HOME$/aquila/ITH/src/analysis/trunk/seg2trunk.py" timestamp="1527225775756">
+        <mark key="'" line="14" column="0" />
+        <mark key="[" line="252" column="19" />
+        <mark key="]" line="252" column="54" />
+        <mark key="^" line="252" column="54" />
+        <mark key="." line="252" column="54" />
+      </file>
+    </filemarks>
+    <jumps>
+      <jump line="14" column="0" filename="$USER_HOME$/aquila/ITH/src/analysis/trunk/seg2trunk.py" />
+      <jump line="80" column="46" filename="$USER_HOME$/scripts/model/init.py" />
+      <jump line="142" column="28" filename="$USER_HOME$/scripts/model/init.py" />
+      <jump line="186" column="6" filename="$USER_HOME$/scripts/model/init.py" />
+      <jump line="187" column="6" filename="$USER_HOME$/scripts/model/init.py" />
+      <jump line="189" column="9" filename="$USER_HOME$/scripts/model/init.py" />
+      <jump line="202" column="4" filename="$USER_HOME$/scripts/model/init.py" />
+      <jump line="50" column="0" filename="$USER_HOME$/scripts/model/init.py" />
+      <jump line="68" column="0" filename="$USER_HOME$/scripts/model/init.py" />
+    </jumps>
+    <registers>
+      <register name="&quot;" type="4">
+        <text>import vcf
+
+vcf_path = &quot;/home/abner/aquila/ITH/bin/sclust/mutect.PASS.vcf.gz&quot;
+
+vcf_reader = vcf.Reader(open('vcf/test/example-4.0.vcf', 'r'))</text>
+      </register>
+      <register name="-" type="4">
+        <text>path/to/vcf</text>
+      </register>
+      <register name="/" type="4">
+        <text>print</text>
+      </register>
+      <register name="0" type="4">
+        <text>import vcf
+
+vcf_path = &quot;/home/abner/aquila/ITH/bin/sclust/mutect.PASS.vcf.gz&quot;
+
+vcf_reader = vcf.Reader(open('vcf/test/example-4.0.vcf', 'r'))</text>
+      </register>
+      <register name="1" type="2">
+        <text encoding="base64">Cg==</text>
+      </register>
+      <register name="2" type="2">
+        <text encoding="base64">ICAgIHBsdC5zaG93KCkKCg==</text>
+      </register>
+      <register name="3" type="2">
+        <text encoding="base64">ICAgICMgYW5pbWF0ZS5zYXZlKCJ0cmlhbDEubXA0Iiwgd3JpdGVyPSJmZm1wZWciKQo=</text>
+      </register>
+      <register name="4" type="2">
+        <text encoding="base64">ICAgICMgICAgICAgICAgICAgICAgICAgICAgICAgIFtncmlkLnBvaW50eltpXSBmb3IgaSBpbiByYW5nZShsZW4oZ3JpZC5wb2ludHopKV0pKQo=</text>
+      </register>
+      <register name="5" type="2">
+        <text encoding="base64">ICAgICMgICAgICAgICAgICAgICAgICAgICAgICAgIFtncmlkLnBvaW50eVtpXSBmb3IgaSBpbiByYW5nZShsZW4oZ3JpZC5wb2ludHkpKV0sCg==</text>
+      </register>
+      <register name="6" type="2">
+        <text encoding="base64">ICAgICNwcmludCgne31cdHt9XHR7fScuZm9ybWF0KFtncmlkLnBvaW50eFtpXSBmb3IgaSBpbiByYW5nZShsZW4oZ3JpZC5wb2ludHgpKV0sCg==</text>
+      </register>
+      <register name="7" type="2">
+        <text encoding="base64">ICAgICMgICAgICAgICAgICBbZ3JpZC5wb2ludHpbaV0gZm9yIGkgaW4gaW5kZXhfc2V0c1sxXVs6LDBdXSkK</text>
+      </register>
+      <register name="8" type="2">
+        <text encoding="base64">ICAgICMgICAgICAgICAgICBbZ3JpZC5wb2ludHlbaV0gZm9yIGkgaW4gaW5kZXhfc2V0c1sxXVs6LDBdXSwK</text>
+      </register>
+      <register name="9" type="2">
+        <text encoding="base64">ICAgICMgYXguc2NhdHRlcihbZ3JpZC5wb2ludHhbaV0gZm9yIGkgaW4gaW5kZXhfc2V0c1sxXVs6LDBdXSwK</text>
+      </register>
+      <register name=":" type="4">
+        <text>set number</text>
+      </register>
+    </registers>
+    <search>
+      <last-search>print</last-search>
+      <last-offset />
+      <last-pattern>print</last-pattern>
+      <last-dir>1</last-dir>
+      <show-last>false</show-last>
+    </search>
+    <history>
+      <history-search>
+        <entry>int</entry>
+        <entry>params[1]</entry>
+        <entry>monitor</entry>
+        <entry>print</entry>
+      </history-search>
+      <history-cmd>
+        <entry>s</entry>
+        <entry>x</entry>
+        <entry>w</entry>
+        <entry>set number</entry>
+      </history-cmd>
+      <history-expr />
+      <history-input />
+    </history>
+    <shortcut-conflicts>
+      <shortcut-conflict owner="vim">
+        <text>ctrl pressed V</text>
+      </shortcut-conflict>
+      <shortcut-conflict owner="vim">
+        <text>ctrl pressed P</text>
+      </shortcut-conflict>
+      <shortcut-conflict owner="vim">
+        <text>ctrl pressed C</text>
+      </shortcut-conflict>
+      <shortcut-conflict owner="vim">
+        <text>ctrl pressed D</text>
+      </shortcut-conflict>
+      <shortcut-conflict owner="vim">
+        <text>ctrl pressed F</text>
+      </shortcut-conflict>
+    </shortcut-conflicts>
+  </component>
+</application>
